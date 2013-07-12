@@ -70,3 +70,47 @@ package {'php-process':
 package {'gcc-c++':
 	ensure => present,
 }
+package {'libicu':
+	ensure => present,
+}
+package {'php-intl':
+	ensure => present,
+}
+file {'webconf':
+	path => '/etc/httpd/conf.d/logistics.conf',
+	mode => 0644,
+	source => '/vagrant/puppetdev/logistics.conf',
+	require => Package['httpd']
+}
+file {'php.ini':
+	path => '/etc/php.ini',
+	mode => 0644,
+	source => '/vagrant/puppetdev/php.ini'
+}
+selboolean {'httpd_enable_homedirs':
+	name => 'httpd_enable_homedirs',
+	persistent => true,
+	value => on
+}
+selboolean {'httpd_read_user_content':
+	name => 'httpd_read_user_content',
+	persistent => true,
+	value => on
+}
+package {'httpd': 
+	ensure => present,
+}
+service {'httpd':
+	provider => redhat,
+	enable => true,
+	ensure => running,
+	require => Package['httpd'],
+	subscribe => [
+		File['webconf'],
+		File['php.ini'],
+	]
+}
+file {'/home/vagrant':
+	ensure => directory,
+	mode => 711
+}
