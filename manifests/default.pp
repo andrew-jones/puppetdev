@@ -145,7 +145,7 @@ File['/home/vagrant/.ssh'] -> File['/home/vagrant/.ssh/id_rsa']
 File['/home/vagrant/.ssh'] -> File['/home/vagrant/.ssh/id_rsa.pub']
 
 exec {'logistics.git':
-	creates => '/home/vagant/Projects/logistics/.gitignore',
+	creates => '/home/vagrant/Projects/logistics/.gitignore',
 	cwd => '/home/vagrant/Projects',
 	command => 'git clone git@bitbucket.org:softint/logistics.git',
 	path => "/usr/bin",
@@ -156,3 +156,15 @@ exec {'logistics.git':
 		File['/home/vagrant/.ssh/id_rsa.pub']
 	]
 }
+
+# Packages for the logistics dbsync command
+package {'perl-DBI':
+	ensure => present
+}
+package {'perl-libwww-perl':
+	ensure => present
+}
+package {'perl-JSON':
+  ensure => present
+}
+
