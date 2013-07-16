@@ -79,13 +79,13 @@ package {'php-intl':
 file {'webconf':
 	path => '/etc/httpd/conf.d/logistics.conf',
 	mode => 0644,
-	source => '/vagrant/puppetdev/logistics.conf',
+	source => '/vagrant/files/logistics.conf',
 	require => Package['httpd']
 }
 file {'php.ini':
 	path => '/etc/php.ini',
 	mode => 0644,
-	source => '/vagrant/puppetdev/php.ini'
+	source => '/vagrant/files/php.ini'
 }
 selboolean {'httpd_enable_homedirs':
 	name => 'httpd_enable_homedirs',
@@ -113,4 +113,46 @@ service {'httpd':
 file {'/home/vagrant':
 	ensure => directory,
 	mode => 711
+}
+file {'/home/vagrant/Projects':
+	ensure => directory,
+	mode => 711,
+	owner => 'vagrant',
+	group => 'vagrant'
+}
+file {'/home/vagrant/.ssh':
+	ensure => directory,
+	mode => 700,
+	owner => 'vagrant',
+	group => 'vagrant'
+}
+file {'/home/vagrant/.ssh/id_rsa':
+	ensure => present,
+	mode => 600,
+	owner => 'vagrant',
+	group => 'vagrant',
+	source => '/vagrant/files/id_rsa'
+}
+file {'/home/vagrant/.ssh/id_rsa.pub':
+	ensure => present,
+	mode => 600,
+	owner => 'vagrant',
+	group => 'vagrant',
+	source => '/vagrant/files/id_rsa.pub'
+}
+
+File['/home/vagrant/.ssh'] -> File['/home/vagrant/.ssh/id_rsa']
+File['/home/vagrant/.ssh'] -> File['/home/vagrant/.ssh/id_rsa.pub']
+
+exec {'logistics.git':
+	creates => '/home/vagant/Projects/logistics/.gitignore',
+	cwd => '/home/vagrant/Projects',
+	command => 'git clone git@bitbucket.org:softint/logistics.git',
+	path => "/usr/bin",
+	user => 'vagrant',
+	group => 'vagrant',
+	require => [
+		File['/home/vagrant/.ssh/id_rsa'],
+		File['/home/vagrant/.ssh/id_rsa.pub']
+	]
 }
