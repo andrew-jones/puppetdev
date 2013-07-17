@@ -1,3 +1,7 @@
+# variables
+$username = "Tim Brown"
+$email = "timb@softint.com.au"
+
 package {'pgdg-redhat91-9.1-5':
 	ensure => installed,
 	provider => rpm,
@@ -97,6 +101,16 @@ selboolean {'httpd_read_user_content':
 	persistent => true,
 	value => on
 }
+selboolean {'httpd_can_network_connect':
+	name => 'httpd_can_network_connect',
+	persistent => true,
+	value => on
+}
+selboolean {'httpd_can_network_connect_db':
+	name => 'httpd_can_network_connect_db',
+	persistent => true,
+	value => on
+}
 package {'httpd': 
 	ensure => present,
 }
@@ -175,6 +189,9 @@ exec {'logistics.git':
 package {'perl-DBI':
 	ensure => present
 }
+package {'perl-DBD-Pg':
+	ensure => present
+}
 package {'perl-libwww-perl':
 	ensure => present
 }
@@ -182,3 +199,20 @@ package {'perl-JSON':
   ensure => present
 }
 
+# Git user name and email setup
+file {'gitconfig':
+	path    => '/home/vagrant/.gitconfig',
+	mode    => 0644,
+	owner   => 'vagrant',
+	group   => 'vagrant',
+	replace => false,
+	content => "[user]
+	name = $username
+	email = $email
+"
+}
+
+# SELinux Troubleshooting packages
+package {'setroubleshoot':
+	ensure => present
+}
