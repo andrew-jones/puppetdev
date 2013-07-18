@@ -47,6 +47,9 @@ package {'gitk':
 package {'git-gui':
 	ensure => present,
 }
+package {'vim-X11':
+	ensure => present,
+}
 package {'php':
 	ensure => present,
 }
@@ -183,6 +186,34 @@ exec {'logistics.git':
 		File['/home/vagrant/.ssh/id_rsa.pub'],
 		Sshkey['bitbucket.org']
 	]
+} ->
+file {'/home/vagrant/Projects/logistics/app/config/parameters.yml':
+	ensure => present,
+	mode   => 664,
+	owner  => 'vagrant',
+	group  => 'vagrant',
+	source => '/vagrant/files/parameters.yml'
+} -> 
+exec {'composer-install':
+	# creates   => '/home/vagrant/Projects/logistics/.gitignore',
+	cwd         => '/home/vagrant/Projects/logistics',
+	command     => 'php composer.phar update',
+	environment => "HOME=/home/vagrant",
+	path        => [ "/usr/bin", "/bin", "/sbin" ],
+	user        => 'vagrant',
+	group       => 'vagrant',
+} ->
+exec {'setfacl-cache-logs':
+	# creates => '/home/vagrant/Projects/logistics/.gitignore',
+	cwd => '/home/vagrant/Projects/logistics',
+	command => 'sudo setfacl -R -m u:apache:rwX -m u:`whoami`:rwX app/cache app/logs && sudo setfacl -dR -m u:apache:rwX -m u:`whoami`:rwX app/cache app/logs',
+	path => "/usr/bin"
+} ->
+exec {'selinux-cache-logs':
+	# creates => '/home/vagrant/Projects/logistics/.gitignore',
+	cwd => '/home/vagrant/Projects/logistics',
+	command => 'sudo chcon -vR --type=httpd_sys_content_t app/logs && sudo chcon -vR --type=httpd_sys_content_t app/cache && sudo chcon -vR --type=httpd_sys_content_t app/cache',
+	path => "/usr/bin"
 }
 
 # Packages for the logistics dbsync command

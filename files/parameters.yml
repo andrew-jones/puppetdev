@@ -1,0 +1,20 @@
+# This file is auto-generated during the composer install
+parameters:
+    database_local_driver: pdo_pgsql
+    database_local_host: 192.168.200.10
+    database_local_port: 5432
+    database_local_name: application
+    database_local_user: logistics
+    database_local_password: softint1
+    database_shared_driver: pdo_pgsql
+    database_shared_host: 192.168.200.10
+    database_shared_port: 5432
+    database_shared_name: logistics
+    database_shared_user: logistics
+    database_shared_password: softint1
+    mailer_transport: smtp
+    mailer_host: 127.0.0.1
+    mailer_user: null
+    mailer_password: null
+    locale: en
+    secret: ThisTokenIsNotSoSecretChangeIt
