@@ -92,7 +92,16 @@ file {'webconf':
 file {'php.ini':
 	path => '/etc/php.ini',
 	mode => 0644,
+	owner => 'root',
+	group => 'root',
 	source => '/vagrant/files/php.ini'
+}
+file {'/etc/sysconfig/iptables':
+	path => '/etc/sysconfig/iptables',
+	mode => 0600,
+	owner => 'root',
+	group => 'root',
+	source => '/vagrant/files/iptables'
 }
 selboolean {'httpd_enable_homedirs':
 	name => 'httpd_enable_homedirs',
@@ -126,6 +135,12 @@ service {'httpd':
 		File['webconf'],
 		File['php.ini'],
 	]
+}
+service {'iptables':
+	provider => redhat,
+	enable => true,
+	ensure => running,
+	subscribe => File['/etc/sysconfig/iptables']
 }
 file {'/home/vagrant':
 	ensure => directory,
@@ -209,6 +224,7 @@ exec {'composer-install':
 	path        => [ "/usr/bin", "/bin", "/sbin" ],
 	user        => 'vagrant',
 	group       => 'vagrant',
+	timeout     => 1200
 } ->
 exec {'setfacl-cache-logs':
 	# creates => '/home/vagrant/Projects/logistics/.gitignore',
