@@ -2,3 +2,4 @@
 Vagrantfile
 files/id_rsa
 files/id_rsa.pub
+files/parameters.yml
