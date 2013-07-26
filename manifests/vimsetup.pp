@@ -46,7 +46,7 @@ exec {'vim-puppet':
 	require => Exec['vim-pathogen']
 }
 exec {'vim-tabular':
-	creates => '/home/vagrant/.vim/bundle/puppet-tabular',
+	creates => '/home/vagrant/.vim/bundle/tabular',
 	cwd => '/home/vagrant/.vim/bundle',
 	command => 'git clone git://github.com/godlygeek/tabular.git',
 	path => [ "/usr/bin", "/bin" ],
