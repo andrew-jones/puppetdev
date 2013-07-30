@@ -216,16 +216,6 @@ file {'/home/vagrant/Projects/logistics/app/config/parameters.yml':
 	group  => 'vagrant',
 	source => '/vagrant/files/parameters.yml'
 } -> 
-exec {'composer-install':
-	# creates   => '/home/vagrant/Projects/logistics/.gitignore',
-	cwd         => '/home/vagrant/Projects/logistics',
-	command     => 'php composer.phar update',
-	environment => "HOME=/home/vagrant",
-	path        => [ "/usr/bin", "/bin", "/sbin" ],
-	user        => 'vagrant',
-	group       => 'vagrant',
-	timeout     => 1200
-} ->
 exec {'setfacl-cache-logs':
 	# creates => '/home/vagrant/Projects/logistics/.gitignore',
 	cwd => '/home/vagrant/Projects/logistics',
@@ -237,6 +227,16 @@ exec {'selinux-cache-logs':
 	cwd => '/home/vagrant/Projects/logistics',
 	command => 'sudo chcon -vR --type=httpd_sys_content_t app/logs && sudo chcon -vR --type=httpd_sys_content_t app/cache && sudo chcon -vR --type=httpd_sys_content_t app/cache',
 	path => "/usr/bin"
+} ->
+exec {'composer-install':
+	# creates   => '/home/vagrant/Projects/logistics/.gitignore',
+	cwd         => '/home/vagrant/Projects/logistics',
+	command     => 'php composer.phar update',
+	environment => "HOME=/home/vagrant",
+	path        => [ "/usr/bin", "/bin", "/sbin" ],
+	user        => 'vagrant',
+	group       => 'vagrant',
+	timeout     => 1200
 }
 
 # Packages for the logistics dbsync command
