@@ -59,3 +59,8 @@ file {'/home/vagrant/.vimrc':
 	mode => 0644,
 	source => '/vagrant/files/vimrc',
 }
+file {'/home/vagrant/.bashrc':
+	path => '/home/vagrant/.bashrc',
+	mode => 0644,
+	source => '/vagrant/files/bashrc',
+}
