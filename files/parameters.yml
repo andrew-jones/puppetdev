@@ -3,7 +3,7 @@ parameters:
     database_local_driver: pdo_pgsql
     database_local_host: 192.168.200.10
     database_local_port: 5432
-    database_local_name: application
+    database_local_name: application2
     database_local_user: logistics
     database_local_password: softint1
     database_shared_driver: pdo_pgsql
